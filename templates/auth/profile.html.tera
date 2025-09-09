@@ -1,0 +1,343 @@
+{% extends "base.html.tera" %}
+{% import "components/card.html.tera" as card %}
+
+{% set body_class = "bg-light" %}
+{% set main_class = "container py-4" %}
+
+{% block title %}Profile Settings - {{ brand_name }}{% endblock title %}
+
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3 mb-4">
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+          <a href="/profile" class="list-group-item list-group-item-action active">
+            <i class="bi bi-person me-2"></i>
+            Profile Settings
+          </a>
+          <a href="/dashboard" class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Dashboard
+          </a>
+          <a href="/security" class="list-group-item list-group-item-action">
+            <i class="bi bi-shield-check me-2"></i>
+            Security
+          </a>
+          <a href="/notifications" class="list-group-item list-group-item-action">
+            <i class="bi bi-bell me-2"></i>
+            Notifications
+          </a>
+          <div class="border-top mt-2 pt-2">
+            <form method="post" action="/logout" class="m-0">
+              <button type="submit" class="list-group-item list-group-item-action text-danger border-0 bg-transparent">
+                <i class="bi bi-box-arrow-right me-2"></i>
+                Sign Out
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <!-- Profile Header -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="position-relative">
+            <img src="{{ user.avatar_url | default(value='/assets/images/avatar-placeholder.png') }}" 
+                 alt="{{ user.full_name }}" 
+                 class="rounded-circle me-3" 
+                 width="80" height="80">
+            <button class="btn btn-sm btn-outline-primary position-absolute bottom-0 end-0 rounded-circle p-1" 
+                    style="width: 28px; height: 28px;">
+              <i class="bi bi-camera"></i>
+            </button>
+          </div>
+          <div class="flex-grow-1">
+            <h4 class="mb-1">{{ user.full_name }}</h4>
+            <p class="text-muted mb-1">{{ user.email }}</p>
+            <p class="text-muted small mb-0">@{{ user.username }}</p>
+          </div>
+          <div>
+            <span class="badge bg-success-soft text-success">
+              <i class="bi bi-check-circle me-1"></i>
+              Active
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    {% if success %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+
+    {% if error %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+
+    <!-- Profile Information -->
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-person-fill me-2"></i>
+          Personal Information
+        </h5>
+        <button class="btn btn-outline-primary btn-sm" type="button" id="editProfileBtn">
+          <i class="bi bi-pencil me-1"></i>
+          Edit
+        </button>
+      </div>
+      <div class="card-body">
+        <form id="profileForm" method="post" action="/profile/update">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">First Name</label>
+              <input type="text" 
+                     class="form-control" 
+                     id="first_name" 
+                     name="first_name"
+                     value="{{ user.first_name | default(value='') }}"
+                     readonly>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input type="text" 
+                     class="form-control" 
+                     id="last_name" 
+                     name="last_name"
+                     value="{{ user.last_name | default(value='') }}"
+                     readonly>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" 
+                   class="form-control" 
+                   id="email" 
+                   name="email"
+                   value="{{ user.email }}"
+                   readonly
+                   disabled>
+            <div class="form-text">Email cannot be changed. Contact support if needed.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" 
+                   class="form-control" 
+                   id="username" 
+                   name="username"
+                   value="{{ user.username }}"
+                   readonly
+                   disabled>
+            <div class="form-text">Username cannot be changed.</div>
+          </div>
+
+          <div class="d-none" id="profileFormActions">
+            <hr>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check me-1"></i>
+                Save Changes
+              </button>
+              <button type="button" class="btn btn-secondary" id="cancelEditBtn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Account Statistics -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        {{ card::stats_card(
+          title="Member Since",
+          value="Jan 2025",
+          icon="bi bi-calendar-check",
+          color="primary"
+        ) }}
+      </div>
+      <div class="col-md-4">
+        {{ card::stats_card(
+          title="Total Logins",
+          value="142",
+          icon="bi bi-box-arrow-in-right",
+          color="success"
+        ) }}
+      </div>
+      <div class="col-md-4">
+        {{ card::stats_card(
+          title="Profile Views",
+          value="89",
+          icon="bi bi-eye",
+          color="info"
+        ) }}
+      </div>
+    </div>
+
+    <!-- Security Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-shield-check me-2"></i>
+          Security Settings
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <h6 class="mb-2">Password</h6>
+            <p class="text-muted mb-3">Last updated 30 days ago</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-key me-1"></i>
+              Change Password
+            </button>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-8">
+            <h6 class="mb-2">Two-Factor Authentication</h6>
+            <p class="text-muted mb-3">Add an extra layer of security to your account</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-success btn-sm">
+              <i class="bi bi-shield-plus me-1"></i>
+              Enable 2FA
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="card border-danger">
+      <div class="card-header bg-danger-soft">
+        <h5 class="card-title mb-0 text-danger">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Danger Zone
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <h6 class="mb-2">Delete Account</h6>
+            <p class="text-muted mb-0">
+              Once you delete your account, there is no going back. Please be certain.
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+              <i class="bi bi-trash me-1"></i>
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Delete Account
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>This action cannot be undone.</strong></p>
+        <p>This will permanently delete your account and all associated data.</p>
+        <p>Please type <code>{{ user.username }}</code> to confirm:</p>
+        <input type="text" class="form-control" id="confirmUsername" placeholder="Enter your username">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn" disabled>
+          Delete Account
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const editBtn = document.getElementById('editProfileBtn');
+  const cancelBtn = document.getElementById('cancelEditBtn');
+  const formActions = document.getElementById('profileFormActions');
+  const firstNameInput = document.getElementById('first_name');
+  const lastNameInput = document.getElementById('last_name');
+  
+  // Original values
+  const originalFirstName = firstNameInput.value;
+  const originalLastName = lastNameInput.value;
+
+  // Edit profile functionality
+  editBtn.addEventListener('click', function() {
+    firstNameInput.removeAttribute('readonly');
+    lastNameInput.removeAttribute('readonly');
+    formActions.classList.remove('d-none');
+    editBtn.classList.add('d-none');
+    firstNameInput.focus();
+  });
+
+  cancelBtn.addEventListener('click', function() {
+    firstNameInput.setAttribute('readonly', true);
+    lastNameInput.setAttribute('readonly', true);
+    firstNameInput.value = originalFirstName;
+    lastNameInput.value = originalLastName;
+    formActions.classList.add('d-none');
+    editBtn.classList.remove('d-none');
+  });
+
+  // Delete account confirmation
+  const confirmUsernameInput = document.getElementById('confirmUsername');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const expectedUsername = '{{ user.username }}';
+
+  confirmUsernameInput.addEventListener('input', function() {
+    if (this.value === expectedUsername) {
+      confirmDeleteBtn.disabled = false;
+    } else {
+      confirmDeleteBtn.disabled = true;
+    }
+  });
+
+  confirmDeleteBtn.addEventListener('click', function() {
+    if (confirmUsernameInput.value === expectedUsername) {
+      // In a real app, this would make an API call
+      alert('Account deletion is not implemented in this demo.');
+    }
+  });
+});
+</script>
+{% endblock extra_js %}

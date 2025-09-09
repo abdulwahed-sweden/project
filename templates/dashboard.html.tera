@@ -1,0 +1,347 @@
+{% extends "base.html.tera" %}
+
+{% block title %}Dashboard - {{ brand_name }}{% endblock title %}
+
+{% block extra_css %}
+<style>
+  .sidebar {
+    min-height: calc(100vh - 76px);
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+  }
+  
+  .sidebar .nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+  }
+  
+  .sidebar .nav-link:hover,
+  .sidebar .nav-link.active {
+    color: #495057;
+    background-color: #e9ecef;
+  }
+  
+  .sidebar .nav-link.active {
+    font-weight: 500;
+    border-right: 3px solid var(--bs-primary);
+  }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3 col-lg-2 px-0 sidebar">
+    <div class="sticky-top pt-3">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="/dashboard">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Overview
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/analytics">
+            <i class="bi bi-graph-up me-2"></i>
+            Analytics
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users">
+            <i class="bi bi-people me-2"></i>
+            Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/settings">
+            <i class="bi bi-gear me-2"></i>
+            Settings
+          </a>
+        </li>
+      </ul>
+      
+      <hr class="my-3">
+      
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/reports">
+            <i class="bi bi-file-earmark-text me-2"></i>
+            Reports
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/api-docs">
+            <i class="bi bi-code-square me-2"></i>
+            API Docs
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="col-md-9 col-lg-10 px-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="h2 mb-1">Dashboard</h1>
+        <p class="text-muted mb-0">Welcome back! Here's what's happening with your application.</p>
+      </div>
+      <div>
+        <button class="btn btn-primary">
+          <i class="bi bi-plus-circle me-2"></i>
+          New Project
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-3 col-md-6">
+        {{ card::stats_card(
+          title="Total Users",
+          value="12,543",
+          change="+12.5%",
+          change_type="positive",
+          icon="bi bi-people-fill",
+          color="primary"
+        ) }}
+      </div>
+      <div class="col-xl-3 col-md-6">
+        {{ card::stats_card(
+          title="Revenue",
+          value="$24,780",
+          change="+8.2%",
+          change_type="positive",
+          icon="bi bi-currency-dollar",
+          color="success"
+        ) }}
+      </div>
+      <div class="col-xl-3 col-md-6">
+        {{ card::stats_card(
+          title="Conversion Rate",
+          value="3.24%",
+          change="-2.1%",
+          change_type="negative",
+          icon="bi bi-graph-up-arrow",
+          color="info"
+        ) }}
+      </div>
+      <div class="col-xl-3 col-md-6">
+        {{ card::stats_card(
+          title="Server Load",
+          value="68%",
+          change="+5.4%",
+          change_type="negative",
+          icon="bi bi-cpu",
+          color="warning"
+        ) }}
+      </div>
+    </div>
+
+    <!-- Charts and Tables Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Performance Overview</h5>
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="chartPeriod" id="period7d" autocomplete="off" checked>
+              <label class="btn btn-outline-secondary" for="period7d">7d</label>
+              
+              <input type="radio" class="btn-check" name="chartPeriod" id="period30d" autocomplete="off">
+              <label class="btn btn-outline-secondary" for="period30d">30d</label>
+              
+              <input type="radio" class="btn-check" name="chartPeriod" id="period90d" autocomplete="off">
+              <label class="btn btn-outline-secondary" for="period90d">90d</label>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="performanceChart" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Recent Activity</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <div class="list-group-item border-0 py-3">
+                <div class="d-flex align-items-start">
+                  <div class="flex-shrink-0">
+                    <div class="bg-success-soft text-success rounded-circle p-2">
+                      <i class="bi bi-plus-circle"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-semibold">John Doe</div>
+                    <div class="text-muted small">created new project</div>
+                    <div class="text-muted small">2 minutes ago</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="list-group-item border-0 py-3">
+                <div class="d-flex align-items-start">
+                  <div class="flex-shrink-0">
+                    <div class="bg-primary-soft text-primary rounded-circle p-2">
+                      <i class="bi bi-gear"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-semibold">Sarah Smith</div>
+                    <div class="text-muted small">updated dashboard settings</div>
+                    <div class="text-muted small">15 minutes ago</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="list-group-item border-0 py-3">
+                <div class="d-flex align-items-start">
+                  <div class="flex-shrink-0">
+                    <div class="bg-warning-soft text-warning rounded-circle p-2">
+                      <i class="bi bi-rocket"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-semibold">Mike Johnson</div>
+                    <div class="text-muted small">deployed to production</div>
+                    <div class="text-muted small">1 hour ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Recent Transactions</h5>
+        <a href="/transactions" class="btn btn-outline-primary btn-sm">View All</a>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>#TXN-001</code></td>
+                <td>Alice Wilson</td>
+                <td class="fw-semibold">$299.00</td>
+                <td>
+                  <span class="badge bg-success-soft text-success">
+                    Completed
+                  </span>
+                </td>
+                <td class="text-muted">Today, 2:30 PM</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>#TXN-002</code></td>
+                <td>Bob Brown</td>
+                <td class="fw-semibold">$149.50</td>
+                <td>
+                  <span class="badge bg-warning-soft text-warning">
+                    Pending
+                  </span>
+                </td>
+                <td class="text-muted">Today, 1:15 PM</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>#TXN-003</code></td>
+                <td>Carol Davis</td>
+                <td class="fw-semibold">$89.99</td>
+                <td>
+                  <span class="badge bg-success-soft text-success">
+                    Completed
+                  </span>
+                </td>
+                <td class="text-muted">Yesterday, 4:45 PM</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+// Sample chart initialization (you would use real data)
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('performanceChart');
+  if (ctx && typeof Chart !== 'undefined') {
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Performance',
+          data: [65, 59, 80, 81, 56, 55, 40],
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.1)',
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+{% endblock extra_js %}

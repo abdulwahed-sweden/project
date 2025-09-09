@@ -1,0 +1,309 @@
+{% extends "base.html.tera" %}
+
+{% block title %}Register - {{ brand_name }}{% endblock title %}
+
+{% block content %}
+<div class="min-vh-100 d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card shadow border-0">
+          <div class="card-body p-5">
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <img src="/assets/images/logo-dark.svg" alt="Logo" height="32" class="mb-3">
+              <h2 class="h3 fw-bold">Create Account</h2>
+              <p class="text-muted">Join us and get started today</p>
+            </div>
+
+            <!-- Error Messages -->
+            {% if errors %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                <strong>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-2">
+                  {% for error in errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form method="post" action="/register" novalidate>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="first_name" class="form-label">First Name</label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="first_name" 
+                         name="first_name"
+                         value="{{ form_data.first_name | default(value='') }}"
+                         placeholder="John">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="last_name" class="form-label">Last Name</label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="last_name" 
+                         name="last_name"
+                         value="{{ form_data.last_name | default(value='') }}"
+                         placeholder="Doe">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="username" class="form-label">Username *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person"></i>
+                  </span>
+                  <input type="text" 
+                         class="form-control{% if field_errors.username %} is-invalid{% endif %}" 
+                         id="username" 
+                         name="username"
+                         value="{{ form_data.username | default(value='') }}"
+                         placeholder="Choose a username"
+                         required
+                         minlength="3"
+                         autocomplete="username">
+                  {% if field_errors.username %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.username }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  At least 3 characters, letters and numbers only
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email Address *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" 
+                         class="form-control{% if field_errors.email %} is-invalid{% endif %}" 
+                         id="email" 
+                         name="email"
+                         value="{{ form_data.email | default(value='') }}"
+                         placeholder="john@example.com"
+                         required
+                         autocomplete="email">
+                  {% if field_errors.email %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.email }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" 
+                         class="form-control{% if field_errors.password %} is-invalid{% endif %}" 
+                         id="password" 
+                         name="password"
+                         placeholder="Create a secure password"
+                         required
+                         minlength="6"
+                         autocomplete="new-password">
+                  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <i class="bi bi-eye" id="toggleIcon"></i>
+                  </button>
+                  {% if field_errors.password %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.password }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  At least 6 characters with letters and numbers
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="password_confirm" class="form-label">Confirm Password *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                  </span>
+                  <input type="password" 
+                         class="form-control{% if field_errors.password_confirm %} is-invalid{% endif %}" 
+                         id="password_confirm" 
+                         name="password_confirm"
+                         placeholder="Confirm your password"
+                         required
+                         minlength="6"
+                         autocomplete="new-password">
+                  {% if field_errors.password_confirm %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.password_confirm }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Terms and Conditions -->
+              <div class="mb-4">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                  <label class="form-check-label" for="terms">
+                    I agree to the 
+                    <a href="/terms" target="_blank" class="text-decoration-none">Terms of Service</a>
+                    and 
+                    <a href="/privacy" target="_blank" class="text-decoration-none">Privacy Policy</a>
+                  </label>
+                  <div class="invalid-feedback">
+                    You must agree to the terms and conditions
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="bi bi-person-plus me-2"></i>
+                Create Account
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="text-center my-4">
+              <span class="text-muted small">or</span>
+            </div>
+
+            <!-- Social Registration (Optional) -->
+            <div class="d-grid gap-2 mb-4">
+              <button class="btn btn-outline-secondary" type="button" disabled>
+                <i class="bi bi-google me-2"></i>
+                Sign up with Google
+                <small class="text-muted ms-2">(Coming Soon)</small>
+              </button>
+            </div>
+
+            <!-- Sign In Link -->
+            <div class="text-center">
+              <span class="text-muted">Already have an account?</span>
+              <a href="/login" class="text-decoration-none ms-1">Sign in here</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4">
+          <p class="text-muted small">
+            By creating an account, you agree to our 
+            <a href="/terms" class="text-decoration-none">Terms of Service</a>
+            and 
+            <a href="/privacy" class="text-decoration-none">Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+.min-vh-100 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.input-group-text {
+  background: transparent;
+  border-right: none;
+}
+
+.form-control {
+  border-left: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: #86b7fe;
+}
+
+.password-strength {
+  height: 4px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+</style>
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Password visibility toggle
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordField = document.getElementById('password');
+  const toggleIcon = document.getElementById('toggleIcon');
+  
+  if (togglePassword) {
+    togglePassword.addEventListener('click', function() {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      
+      if (type === 'password') {
+        toggleIcon.classList.remove('bi-eye-slash');
+        toggleIcon.classList.add('bi-eye');
+      } else {
+        toggleIcon.classList.remove('bi-eye');
+        toggleIcon.classList.add('bi-eye-slash');
+      }
+    });
+  }
+
+  // Password confirmation validation
+  const password = document.getElementById('password');
+  const passwordConfirm = document.getElementById('password_confirm');
+  
+  function validatePasswordMatch() {
+    if (password.value !== passwordConfirm.value) {
+      passwordConfirm.setCustomValidity("Passwords don't match");
+    } else {
+      passwordConfirm.setCustomValidity('');
+    }
+  }
+  
+  password.addEventListener('input', validatePasswordMatch);
+  passwordConfirm.addEventListener('input', validatePasswordMatch);
+
+  // Form validation
+  const forms = document.querySelectorAll('form[novalidate]');
+  Array.from(forms).forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  });
+
+  // Username validation (alphanumeric only)
+  const usernameField = document.getElementById('username');
+  usernameField.addEventListener('input', function() {
+    this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
+  });
+});
+</script>
+{% endblock extra_js %}

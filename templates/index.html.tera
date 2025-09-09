@@ -1,113 +1,104 @@
 {% extends "base.html.tera" %}
 
-{% block title %}Rust Web AI{% endblock title %}
+{% block title %}{{ title }}{% endblock title %}
 
 {% block content %}
-<!-- HERO (بسيط جدًا) -->
+<!-- Welcome Section -->
 <section class="py-5">
-  <div class="container text-center">
-    <h1 class="fw-semibold mb-2">Rust Web AI</h1>
-    <p class="text-muted mb-4">Fast, minimal Actix-web + Tera starter.</p>
-    <a href="#bench" class="btn btn-primary">Get started</a>
-    <li class="list-item">
-        <span class="badge bg-success-soft rounded-pill">
-            <span class="bull bull-lg animate-pulse-success bg-success me-2"></span>
-            <span class="text-dark">Completed</span>
-        </span>
-    </li>
-
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-5 fw-bold mb-3">{{ title }}</h1>
+        <p class="lead text-muted mb-4">
+          Welcome to our Rust web application with user authentication.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- RUST SPEED TEST -->
-<section id="bench" class="my-5">
+<!-- Demo User Section -->
+<section class="py-4 bg-light">
   <div class="container">
-    <div class="p-4 border rounded-3 rusty-card">
-      <div class="d-flex flex-wrap align-items-end gap-3">
-        <div>
-          <label for="ops" class="form-label mb-1">Operations</label>
-          <input id="ops" type="number" class="form-control" style="max-width:220px" value="5000000" min="100000" step="100000">
-          <div class="form-text">Try 5–20 million; higher = longer test.</div>
-        </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card border-0 shadow">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="bi bi-person-check-fill"></i>
+              </div>
+              <h3 class="mt-3 mb-2">Demo User Account</h3>
+              <p class="text-muted">Test the authentication system with these credentials</p>
+            </div>
+            
+            <div class="bg-light p-3 rounded mb-3">
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label fw-semibold">Email:</label>
+                  <div class="p-2 bg-white rounded border">
+                    <code class="text-primary">newuser2@example.com</code>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label fw-semibold">Password:</label>
+                  <div class="p-2 bg-white rounded border">
+                    <code class="text-primary">password123</code>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <div class="ms-auto">
-          <button id="run" class="btn btn-dark">Run test</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+              <a href="/login" class="btn btn-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Login Now
+              </a>
+              <a href="/register" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-person-plus me-2"></i>
+                Register New Account
+              </a>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <hr class="my-4">
-
-      <div id="result" class="row g-3 small">
-        <div class="col-md">
-          <div class="border rounded-3 p-3">
-            <div class="text-muted">Elapsed</div>
-            <div class="fw-semibold" id="r-sec">—</div>
+<!-- Features Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="h-100">
+          <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+            <i class="bi bi-shield-check"></i>
           </div>
-        </div>
-        <div class="col-md">
-          <div class="border rounded-3 p-3">
-            <div class="text-muted">Ops</div>
-            <div class="fw-semibold" id="r-ops">—</div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="border rounded-3 p-3">
-            <div class="text-muted">Throughput</div>
-            <div class="fw-semibold" id="r-mops">—</div>
-          </div>
+          <h5>Secure Authentication</h5>
+          <p class="text-muted small">Session-based login with bcrypt password hashing</p>
         </div>
       </div>
-
-      <div class="mt-3 text-muted small">Theme: minimal “rusty” accent.</div>
+      <div class="col-md-4">
+        <div class="h-100">
+          <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+            <i class="bi bi-speedometer2"></i>
+          </div>
+          <h5>Built with Rust</h5>
+          <p class="text-muted small">High-performance web application using Actix-Web</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="h-100">
+          <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+            <i class="bi bi-palette"></i>
+          </div>
+          <h5>Modern UI</h5>
+          <p class="text-muted small">Responsive design with Bootstrap and Smarty theme</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 {% endblock content %}
 
-{% block extra_css %}
-<style>
-  .rusty-card { border-color: #DEA584 !important; }
-  .rusty-badge {
-    display:inline-block; padding:.25rem .5rem; border-radius:.5rem;
-    background:#DEA58422; color:#8a5a2a; font-weight:600;
-  }
-</style>
-{% endblock extra_css %}
-
-{% block extra_js %}
-<script>
-(function(){
-  const $ = s => document.querySelector(s);
-  const opsEl = $('#ops');
-  const runBtn = $('#run');
-  const rSec = $('#r-sec');
-  const rOps = $('#r-ops');
-  const rMops = $('#r-mops');
-
-  async function run() {
-    const ops = Math.max(100000, Number(opsEl.value)||5000000);
-    runBtn.disabled = true;
-    const old = runBtn.textContent;
-    runBtn.textContent = 'Running…';
-
-    try {
-      const res = await fetch(`/api/bench?ops=${ops}`);
-      const data = await res.json();
-      rSec.textContent = `${data.seconds.toFixed(3)} s`;
-      rOps.textContent = data.ops.toLocaleString();
-      rMops.textContent = `${data.mops_per_sec.toFixed(2)} Mops/s`;
-    } catch (e) {
-      rSec.textContent = 'Error';
-      rOps.textContent = '—';
-      rMops.textContent = '—';
-      console.error(e);
-    } finally {
-      runBtn.textContent = old;
-      runBtn.disabled = false;
-    }
-  }
-
-  runBtn.addEventListener('click', run);
-})();
-</script>
-{% endblock extra_js %}

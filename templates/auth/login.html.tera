@@ -1,0 +1,208 @@
+{% extends "base.html.tera" %}
+
+{% block title %}Login - {{ brand_name }}{% endblock title %}
+
+{% block content %}
+<div class="min-vh-100 d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow border-0">
+          <div class="card-body p-5">
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <img src="/assets/images/logo-dark.svg" alt="Logo" height="32" class="mb-3">
+              <h2 class="h3 fw-bold">Welcome Back</h2>
+              <p class="text-muted">Sign in to your account</p>
+            </div>
+
+            <!-- Messages -->
+            {% if msg %}
+              {% if msg == "logged_out" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <i class="bi bi-check-circle me-2"></i>
+                  You have been successfully logged out.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% elif msg == "registration_success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <i class="bi bi-check-circle me-2"></i>
+                  Registration successful! Please log in with your credentials.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% elif msg == "login_required" %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  Please log in to access that page.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endif %}
+            {% endif %}
+
+            {% if error %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            {% endif %}
+
+            <!-- Login Form -->
+            <form method="post" action="/login" novalidate>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" 
+                         class="form-control{% if field_errors.email %} is-invalid{% endif %}" 
+                         id="email" 
+                         name="email" 
+                         value="{{ form_data.email | default(value='') }}"
+                         placeholder="Enter your email"
+                         required
+                         autocomplete="username">
+                  {% if field_errors.email %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.email }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="password" class="form-label">
+                  Password
+                  <a href="/forgot-password" class="float-end text-decoration-none small">
+                    Forgot password?
+                  </a>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" 
+                         class="form-control{% if field_errors.password %} is-invalid{% endif %}" 
+                         id="password" 
+                         name="password"
+                         placeholder="Enter your password"
+                         required
+                         autocomplete="current-password">
+                  {% if field_errors.password %}
+                    <div class="invalid-feedback">
+                      {{ field_errors.password }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me" value="true">
+                  <label class="form-check-label" for="remember_me">
+                    Keep me signed in
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Sign In
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="text-center my-4">
+              <span class="text-muted small">or</span>
+            </div>
+
+            <!-- Social Login (Optional) -->
+            <div class="d-grid gap-2 mb-4">
+              <button class="btn btn-outline-secondary" type="button" disabled>
+                <i class="bi bi-google me-2"></i>
+                Continue with Google
+                <small class="text-muted ms-2">(Coming Soon)</small>
+              </button>
+            </div>
+
+            <!-- Sign Up Link -->
+            <div class="text-center">
+              <span class="text-muted">Don't have an account?</span>
+              <a href="/register" class="text-decoration-none ms-1">Sign up here</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4">
+          <p class="text-muted small">
+            By signing in, you agree to our 
+            <a href="/terms" class="text-decoration-none">Terms of Service</a>
+            and 
+            <a href="/privacy" class="text-decoration-none">Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+.min-vh-100 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.input-group-text {
+  background: transparent;
+  border-right: none;
+}
+
+.form-control {
+  border-left: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: #86b7fe;
+}
+</style>
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script>
+// Auto-focus first input field
+document.addEventListener('DOMContentLoaded', function() {
+  const emailInput = document.getElementById('email');
+  if (emailInput && !emailInput.value) {
+    emailInput.focus();
+  }
+});
+
+// Form validation
+(function() {
+  'use strict';
+  const forms = document.querySelectorAll('form[novalidate]');
+  Array.from(forms).forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  });
+})();
+</script>
+{% endblock extra_js %}

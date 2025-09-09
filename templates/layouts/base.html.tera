@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>{% block title %}{{ title | default(value="Rust Web AI") }}{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}{{ meta_description | default(value="Rust Web AI — Smarty theme with Actix + Tera") }}{% endblock meta_description %}">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Theme Favicon -->
+    <link rel="icon" href="/assets/images/favicon.ico">
+    
+    <!-- Speed up external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+
+    <!-- Preload icon fonts -->
+    <link rel="preload" href="/assets/fonts/flaticon/Flaticon.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Smarty Theme CSS -->
+    <link rel="stylesheet" href="/assets/css/core.min.css">
+    <link rel="stylesheet" href="/assets/css/vendor_bundle.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    {% block extra_css %}{% endblock extra_css %}
+  </head>
+  <body{% if body_class %} class="{{ body_class }}"{% endif %}>
+
+    {% block header %}
+      {% include "components/header.html.tera" %}
+    {% endblock header %}
+
+    {% block sidebar %}
+      <!-- Sidebar will be included on pages that need it -->
+    {% endblock sidebar %}
+
+    <main{% if main_class %} class="{{ main_class }}"{% endif %}>
+      {% block breadcrumbs %}{% endblock breadcrumbs %}
+      
+      {% block content %}{% endblock content %}
+    </main>
+
+    {% block footer %}
+      {% include "components/footer.html.tera" %}
+    {% endblock footer %}
+
+    <!-- Smarty Theme JS -->
+    <script src="/assets/js/core.min.js"></script>
+    <script src="/assets/js/vendor_bundle.min.js"></script>
+
+    {% block extra_js %}{% endblock extra_js %}
+  </body>
+</html>

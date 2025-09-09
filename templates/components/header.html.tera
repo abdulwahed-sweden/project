@@ -1,0 +1,99 @@
+<!-- Navigation Header -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+  <div class="container{% if header_fluid %}-fluid{% endif %}">
+    
+    <!-- Brand -->
+    <a class="navbar-brand" href="/">
+      <img src="/assets/images/logo-dark.svg" alt="Logo" height="24" class="d-inline-block align-text-top me-2">
+      {{ brand_name | default(value="Rust Web AI") }}
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarMain" 
+            aria-controls="navbarMain" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto">
+        {% for item in nav_items | default(value=[]) %}
+        <li class="nav-item{% if item.dropdown %} dropdown{% endif %}">
+          {% if item.dropdown %}
+            <a class="nav-link dropdown-toggle{% if active == item.key %} active{% endif %}" 
+               href="#" role="button" 
+               data-bs-toggle="dropdown" 
+               aria-expanded="false">
+              {% if item.icon %}<i class="{{ item.icon }} me-1"></i>{% endif %}
+              {{ item.label }}
+            </a>
+            <ul class="dropdown-menu">
+              {% for sub_item in item.dropdown %}
+                {% if sub_item.divider %}
+                  <li><hr class="dropdown-divider"></li>
+                {% else %}
+                  <li>
+                    <a class="dropdown-item" href="{{ sub_item.url }}">
+                      {% if sub_item.icon %}<i class="{{ sub_item.icon }} me-2"></i>{% endif %}
+                      {{ sub_item.label }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% else %}
+            <a class="nav-link{% if active == item.key %} active{% endif %}" 
+               href="{{ item.url }}"
+               {% if active == item.key %}aria-current="page"{% endif %}>
+              {% if item.icon %}<i class="{{ item.icon }} me-1"></i>{% endif %}
+              {{ item.label }}
+            </a>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Right Side Navigation -->
+      <ul class="navbar-nav align-items-lg-center">
+        {% if show_search | default(value=false) %}
+        <li class="nav-item me-3">
+          <form class="d-flex" role="search">
+            <input class="form-control form-control-sm" type="search" placeholder="Search..." aria-label="Search">
+          </form>
+        </li>
+        {% endif %}
+
+        {% if user %}
+          <!-- User is logged in -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <img src="{{ user.avatar | default(value='/assets/images/avatar-placeholder.png') }}" 
+                   alt="{{ user.name }}" 
+                   class="rounded-circle me-1" 
+                   width="24" height="24">
+              {{ user.name }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="/settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <!-- User is not logged in -->
+          <li class="nav-item me-2">
+            <a class="btn btn-outline-primary btn-sm" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary btn-sm" href="/register">Register</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

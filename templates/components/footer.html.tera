@@ -1,0 +1,79 @@
+<!-- Footer -->
+<footer class="bg-dark text-light">
+  <div class="container">
+    {% if footer_style == "full" %}
+      <!-- Full Footer with Links -->
+      <div class="py-5">
+        <div class="row">
+          <div class="col-lg-3 mb-4">
+            <h5 class="mb-3">{{ brand_name | default(value="Rust Web AI") }}</h5>
+            <p class="text-muted small">
+              {{ footer_description | default(value="High-performance web applications built with Rust and the Smarty theme.") }}
+            </p>
+            {% if social_links %}
+            <div class="d-flex gap-2 mt-3">
+              {% for social in social_links %}
+              <a href="{{ social.url }}" class="btn btn-outline-light btn-sm" aria-label="{{ social.name }}">
+                <i class="{{ social.icon }}"></i>
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          {% for column in footer_columns | default(value=[]) %}
+          <div class="col-lg-2 col-md-3 col-6 mb-4">
+            <h6 class="mb-3">{{ column.title }}</h6>
+            <ul class="list-unstyled small">
+              {% for link in column.links %}
+              <li class="mb-2">
+                <a href="{{ link.url }}" class="text-muted text-decoration-none hover-text-light">
+                  {{ link.label }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+
+        <hr class="my-4 border-secondary">
+      </div>
+    {% endif %}
+
+    <!-- Bottom Footer -->
+    <div class="py-4 {{ footer_style != 'full' and 'border-top border-secondary' or '' }}">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <small class="text-muted">
+            © <span id="year">{{ current_year | default(value="2025") }}</span> 
+            {{ brand_name | default(value="Rust Web AI") }}. 
+            {{ copyright_text | default(value="All rights reserved.") }}
+          </small>
+        </div>
+        <div class="col-md-6 text-md-end mt-2 mt-md-0">
+          <small class="text-muted">
+            Built with 
+            <i class="text-danger">♥</i> 
+            using Actix-Web & 
+            <a href="https://stepofweb.com" class="text-decoration-none">Smarty</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+.hover-text-light:hover { color: #fff !important; }
+</style>
+
+<script>
+// Auto-update year
+document.addEventListener('DOMContentLoaded', function() {
+  const yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+});
+</script>

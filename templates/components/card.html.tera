@@ -1,0 +1,71 @@
+{% macro card(title="", body="", footer="", class="", header_class="", body_class="", footer_class="", image="") %}
+<div class="card {{ class }}">
+  {% if image %}
+  <img src="{{ image }}" class="card-img-top" alt="{{ title }}">
+  {% endif %}
+  
+  {% if title %}
+  <div class="card-header {{ header_class }}">
+    <h5 class="card-title mb-0">{{ title }}</h5>
+  </div>
+  {% endif %}
+  
+  {% if body %}
+  <div class="card-body {{ body_class }}">
+    {{ body | safe }}
+  </div>
+  {% endif %}
+  
+  {% if footer %}
+  <div class="card-footer {{ footer_class }}">
+    {{ footer | safe }}
+  </div>
+  {% endif %}
+</div>
+{% endmacro card %}
+
+{% macro stats_card(title="", value="", change="", change_type="positive", icon="", color="primary") %}
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div class="flex-shrink-0">
+        {% if icon %}
+        <div class="bg-{{ color }}-soft text-{{ color }} rounded-3 p-3">
+          <i class="{{ icon }} fs-4"></i>
+        </div>
+        {% endif %}
+      </div>
+      <div class="flex-grow-1 ms-3">
+        <div class="text-muted small">{{ title }}</div>
+        <div class="fs-3 fw-bold">{{ value }}</div>
+        {% if change %}
+        <div class="small">
+          <span class="text-{{ change_type == 'positive' and 'success' or 'danger' }}">
+            <i class="bi bi-arrow-{{ change_type == 'positive' and 'up' or 'down' }}-right me-1"></i>
+            {{ change }}
+          </span>
+          <span class="text-muted">from last period</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro stats_card %}
+
+{% macro feature_card(icon="", title="", description="", link="", link_text="Learn More") %}
+<div class="card h-100 border-0 shadow-sm">
+  <div class="card-body text-center p-4">
+    {% if icon %}
+    <div class="mb-3">
+      <i class="{{ icon }} text-primary" style="font-size: 3rem;"></i>
+    </div>
+    {% endif %}
+    <h5 class="card-title">{{ title }}</h5>
+    <p class="card-text text-muted">{{ description }}</p>
+    {% if link %}
+    <a href="{{ link }}" class="btn btn-outline-primary">{{ link_text }}</a>
+    {% endif %}
+  </div>
+</div>
+{% endmacro feature_card %}

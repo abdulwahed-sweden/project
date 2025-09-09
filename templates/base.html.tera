@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" dir="ltr">
   <head>
-    <title>{% block title %}Rust Web AI{% endblock title %}</title>
+    <title>{% block title %}Rust Project{% endblock title %}</title>
     <meta name="description" content="{% block meta_description %}Rust Web AI — minimal Actix + Tera starter{% endblock meta_description %}">
 
     <meta charset="utf-8">
@@ -44,7 +44,7 @@
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="/">Rust Web AI</a>
+        <a class="navbar-brand fw-bold" href="/">AI Rust Project </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
                 aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
     <footer class="border-top py-3">
       <div class="container small text-muted d-flex justify-content-between">
         <span>© <span id="year">2025</span> Rust Web AI</span>
-        <span>Smarty • Bootstrap 5</span>
+        <span>Actix-Web • Bootstrap 5</span>
       </div>
     </footer>
 

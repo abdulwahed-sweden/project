@@ -1,0 +1,71 @@
+{% extends "base.html.tera" %}
+
+{% block title %}Register - {{ brand_name }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h2 class="h3">Create Account</h2>
+            <p class="text-muted">Join us today</p>
+          </div>
+
+          {% if errors %}
+            <div class="alert alert-danger">
+              <strong>Please fix the following errors:</strong>
+              <ul class="mb-0">
+                {% for error in errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <!-- Registration Form -->
+          <form method="post" action="/register">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ form_data.first_name | default(value='') }}">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ form_data.last_name | default(value='') }}">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="username" class="form-label">Username *</label>
+              <input type="text" class="form-control" id="username" name="username" value="{{ form_data.username | default(value='') }}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address *</label>
+              <input type="email" class="form-control" id="email" name="email" value="{{ form_data.email | default(value='') }}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password *</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="password_confirm" class="form-label">Confirm Password *</label>
+              <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Create Account</button>
+          </form>
+
+          <div class="text-center mt-4">
+            <p>Already have an account? <a href="/login">Sign in here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

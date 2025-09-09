@@ -1,0 +1,10 @@
+{% extends "base.html.tera" %}
+
+{% block title %}Test Login{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1>Test Login Page</h1>
+  <p>This is a test login page to verify template rendering.</p>
+</div>
+{% endblock content %}
