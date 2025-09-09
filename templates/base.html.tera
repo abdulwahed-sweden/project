@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>{% block title %}Rust Web AI{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}Rust Web AI — minimal Actix + Tera starter{% endblock meta_description %}">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- speed up external res -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+
+    <!-- optional: preloading icon font (ensure file exists or remove this line) -->
+    <link rel="preload" href="/assets/fonts/flaticon/Flaticon.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Smarty / Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/css/core.min.css">
+    <link rel="stylesheet" href="/assets/css/vendor_bundle.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+      /* simple, tasteful highlight for active nav link */
+      .navbar .nav-link.active {
+        font-weight: 600;
+        position: relative;
+      }
+      .navbar .nav-link.active::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; bottom: -6px;
+        height: 2px; border-radius: 2px;
+        background: currentColor; opacity: .25;
+      }
+    </style>
+
+    {% block extra_css %}{% endblock extra_css %}
+  </head>
+  <body>
+
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Rust Web AI</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
+                aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if active is defined and active == "home" %}active{% endif %}"
+                href="/"
+                {% if active is defined and active == "home" %}aria-current="page"{% endif %}
+              >Home</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if active is defined and active == "about" %}active{% endif %}"
+                href="javascript:void(0)"
+              >About</a>
+            </li>
+
+            <li class="d-none d-lg-block mx-2"><span class="vr" style="opacity:.25;"></span></li>
+
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-secondary" href="javascript:void(0)" role="button">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary" href="javascript:void(0)" role="button">Register</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container my-5">
+      {% block content %}{% endblock content %}
+    </main>
+
+    <footer class="border-top py-3">
+      <div class="container small text-muted d-flex justify-content-between">
+        <span>© <span id="year">2025</span> Rust Web AI</span>
+        <span>Smarty • Bootstrap 5</span>
+      </div>
+    </footer>
+
+    <!-- Core javascripts -->
+    <script src="/assets/js/core.min.js"></script>
+    <script src="/assets/js/vendor_bundle.min.js"></script>
+
+    <!-- tiny runtime year (avoids needing Tera chrono feature) -->
+    <script>
+      (function(){ try {
+        document.getElementById('year').textContent = new Date().getFullYear();
+      } catch(_){} })();
+    </script>
+
+    {% block extra_js %}{% endblock extra_js %}
+  </body>
+</html>
