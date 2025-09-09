@@ -1,0 +1,166 @@
+{% extends "base.html.tera" %}
+
+{% block title %}{{ title }} - {{ brand_name }}{% endblock title %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <div class="bg-gradient-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-robot" style="font-size: 28px;"></i>
+        </div>
+        <h1 class="display-5 fw-bold mb-3">Deepseek AI</h1>
+        <p class="lead text-muted">
+          Ask questions, get intelligent responses powered by advanced AI
+        </p>
+      </div>
+
+      <!-- AI Query Form -->
+      <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+        <div class="card-body p-4">
+          <form method="post" action="/deepseek" class="needs-validation" novalidate>
+            <div class="mb-4">
+              <label for="query" class="form-label fw-semibold mb-2">
+                <i class="bi bi-chat-dots me-2 text-primary"></i>
+                What would you like to ask?
+              </label>
+              <textarea 
+                class="form-control border-0 bg-light" 
+                id="query" 
+                name="query" 
+                rows="4" 
+                placeholder="Type your question or request here..."
+                style="border-radius: 12px; font-size: 1rem; padding: 1rem;"
+                required>{{ query | default(value="") }}</textarea>
+              <div class="invalid-feedback">
+                Please enter a question or request.
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-between align-items-center">
+              <div class="text-muted small">
+                <i class="bi bi-info-circle me-1"></i>
+                AI responses are powered by advanced language models
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill">
+                <i class="bi bi-send me-2"></i>
+                Ask AI
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Response Section -->
+      {% if response %}
+      <div class="card border-0 shadow-sm" style="border-radius: 16px; border-left: 4px solid var(--bs-success) !important;">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-start mb-3">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+              <i class="bi bi-robot"></i>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="mb-2 text-success fw-semibold">AI Response</h5>
+              <div class="bg-light p-3 rounded-3" style="border-radius: 12px;">
+                <p class="mb-0" style="line-height: 1.6; white-space: pre-wrap;">{{ response }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-end">
+            <button class="btn btn-outline-secondary btn-sm rounded-pill me-2" onclick="copyResponse()">
+              <i class="bi bi-clipboard me-1"></i>Copy
+            </button>
+            <a href="/deepseek" class="btn btn-outline-primary btn-sm rounded-pill">
+              <i class="bi bi-arrow-clockwise me-1"></i>New Query
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Sample Queries (shown only when no response) -->
+      {% if not response %}
+      <div class="mt-4">
+        <h6 class="text-muted mb-3">Try these sample queries:</h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <button class="btn btn-outline-light w-100 text-start" onclick="setSampleQuery(this)" style="border-radius: 8px;">
+              <i class="bi bi-lightbulb me-2 text-warning"></i>
+              <small>Explain quantum computing in simple terms</small>
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-light w-100 text-start" onclick="setSampleQuery(this)" style="border-radius: 8px;">
+              <i class="bi bi-code-slash me-2 text-info"></i>
+              <small>Write a Python function to sort a list</small>
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-light w-100 text-start" onclick="setSampleQuery(this)" style="border-radius: 8px;">
+              <i class="bi bi-graph-up me-2 text-success"></i>
+              <small>What are the benefits of renewable energy?</small>
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-light w-100 text-start" onclick="setSampleQuery(this)" style="border-radius: 8px;">
+              <i class="bi bi-book me-2 text-primary"></i>
+              <small>Summarize the history of artificial intelligence</small>
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+// Copy response to clipboard
+function copyResponse() {
+  const responseText = document.querySelector('.bg-light p').textContent;
+  navigator.clipboard.writeText(responseText).then(function() {
+    // Show success feedback
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+    btn.classList.remove('btn-outline-secondary');
+    btn.classList.add('btn-success');
+    
+    setTimeout(() => {
+      btn.innerHTML = originalContent;
+      btn.classList.remove('btn-success');
+      btn.classList.add('btn-outline-secondary');
+    }, 2000);
+  });
+}
+
+// Set sample query in textarea
+function setSampleQuery(button) {
+  const query = button.querySelector('small').textContent;
+  document.getElementById('query').value = query;
+  document.getElementById('query').focus();
+}
+
+// Form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock extra_js %}

@@ -46,32 +46,10 @@ async fn index(tmpl: web::Data<Tera>, user: OptionalAuthUser) -> impl Responder 
             "icon": "bi bi-stars"
         }),
         serde_json::json!({
-            "key": "docs",
-            "label": "Documentation",
-            "url": "/docs", 
-            "icon": "bi bi-book"
-        }),
-        serde_json::json!({
-            "key": "about",
-            "label": "About",
-            "dropdown": vec![
-                serde_json::json!({
-                    "label": "Our Story",
-                    "url": "/about",
-                    "icon": "bi bi-info-circle"
-                }),
-                serde_json::json!({
-                    "label": "Team",
-                    "url": "/team",
-                    "icon": "bi bi-people"
-                }),
-                serde_json::json!({"divider": true}),
-                serde_json::json!({
-                    "label": "Contact",
-                    "url": "/contact",
-                    "icon": "bi bi-envelope"
-                })
-            ]
+            "key": "deepseek",
+            "label": "Deepseek AI",
+            "url": "/deepseek",
+            "icon": "bi bi-robot"
         })
     ];
     ctx.insert("nav_items", &nav_items);
@@ -207,6 +185,10 @@ async fn main() -> std::io::Result<()> {
             .route("/register", web::get().to(handlers::register_page))
             .route("/register", web::post().to(handlers::register_submit))
             .route("/logout", web::post().to(logout))
+            
+            // AI routes (accessible to all users)
+            .route("/deepseek", web::get().to(handlers::deepseek_page))
+            .route("/deepseek", web::post().to(handlers::deepseek_submit))
             
             // Protected routes
             .route("/dashboard", web::get().to(handlers::dashboard_page))

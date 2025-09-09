@@ -64,7 +64,7 @@
               <a
                 class="nav-link {% if active is defined and active == "about" %}active{% endif %}"
                 href="javascript:void(0)"
-              >About</a>
+              >Deepseek AI</a>
             </li>
 
             <li class="d-none d-lg-block mx-2"><span class="vr" style="opacity:.25;"></span></li>

@@ -253,3 +253,57 @@ pub async fn profile_page(
         .content_type("text/html; charset=utf-8")
         .body(body))
 }
+
+pub async fn deepseek_page(
+    tmpl: web::Data<Tera>,
+    user: OptionalAuthUser,
+) -> Result<HttpResponse> {
+    let mut ctx = Context::new();
+    ctx.insert("title", "Deepseek AI");
+    ctx.insert("brand_name", "Rust Web AI");
+    ctx.insert("active", "deepseek");
+    
+    if let Some(user) = user.0 {
+        ctx.insert("user", &user);
+    }
+
+    let body = tmpl
+        .render("deepseek.html.tera", &ctx)
+        .unwrap_or_else(|e| format!("Template error: {e}"));
+    
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(body))
+}
+
+#[derive(serde::Deserialize)]
+pub struct DeepseekQuery {
+    query: String,
+}
+
+pub async fn deepseek_submit(
+    tmpl: web::Data<Tera>,
+    form: web::Form<DeepseekQuery>,
+    user: OptionalAuthUser,
+) -> Result<HttpResponse> {
+    let mut ctx = Context::new();
+    ctx.insert("title", "Deepseek AI");
+    ctx.insert("brand_name", "Rust Web AI");
+    ctx.insert("active", "deepseek");
+    ctx.insert("query", &form.query);
+    
+    if let Some(user) = user.0 {
+        ctx.insert("user", &user);
+    }
+
+    // For now, just echo back the query - API integration will be added later
+    ctx.insert("response", &format!("You asked: '{}'", form.query));
+
+    let body = tmpl
+        .render("deepseek.html.tera", &ctx)
+        .unwrap_or_else(|e| format!("Template error: {e}"));
+    
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(body))
+}
